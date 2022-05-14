@@ -2,7 +2,6 @@
 
 import time
 
-from sklearn import datasets, model_selection
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import f1_score, accuracy_score
 from sklearn import datasets
@@ -11,9 +10,8 @@ from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier, AdaBoostClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.preprocessing import MinMaxScaler
 
-from torch import nn, no_grad, max, from_numpy, sigmoid, multiprocessing, unsqueeze, equal
+from torch import nn, no_grad, max, from_numpy, unsqueeze, equal
 from torch.optim import Adam
 
 from tensorflow import keras
@@ -22,7 +20,7 @@ from keras.datasets import mnist
 
 # The following methods are Sklearn oriented
 
-# function that trains a given model, evaluates it through f1 score, and calculates the training and testing times.
+# function that trains a given model, evaluates it through accuracy score, and calculates the training and testing times.
 def skl_master_model(X_train, X_test, y_train, y_test, model):
 
     # training phase
@@ -97,13 +95,15 @@ def skl_decision_tree(X_train, X_test, y_train, y_test, random_state=42, depth=3
     print("End of Decision Tree model")
     print()
 
+
 # method that creates a gradient boost model with max depth as input (default 3), which is trained, tested and evaluated
 def skl_gradient_boost(X_train, X_test, y_train, y_test, random_state=42, depth=3):
     print("Initializing Gradient Boosting model")
-    model = GradientBoostingClassifier(random_state=random_state, max_depth=3)
+    model = GradientBoostingClassifier(random_state=random_state, max_depth=depth)
     skl_master_model(X_train, X_test, y_train, y_test, model)
     print("End of Gradient Boosting model")
     print()
+
 
 # method that creates a ada boost model, which is trained, tested and evaluated
 def skl_ada_boost(X_train, X_test, y_train, y_test, random_state=42):
@@ -126,7 +126,7 @@ def skl_naive_bayes(X_train, X_test, y_train, y_test):
 # The following methods are Tensorflow Oriented
 # method that creates a CNN keras model to train mnist data (28x28) and evaluate
 def tf_keras_CNN(X_train, X_test, y_train, y_test, epochs=1000):
-    # creating the CNN Neural Network Model of 3 filter layers of 5x5 followed by to Fully Connected layers of
+    # creating the CNN Neural Network Model of 3 filter layers of 5x5 followed by 2 Fully Connected layers of
     # 50 neurons each.
     model = keras.Sequential()
     model.add(keras.layers.Conv2D(1, kernel_size=(5, 5), input_shape=(28, 28, 1), activation="relu"))
@@ -156,7 +156,7 @@ def tf_keras_MLP(X_train, X_test, y_train, y_test, epochs=1000):
     tf_keras_model_train_and_test(X_train, X_test, y_train, y_test, model, epochs)
 
 
-# method that creates a neural network in TensorFlow
+# method that trains and evaluates a neural network in TensorFlow
 def tf_keras_model_train_and_test(X_train, X_test, y_train, y_test, model, epochs=1000):
     # training phase
     print("Initialize Model Training. Wait a bit...")
@@ -230,7 +230,6 @@ def pt_CNN(X_train, X_test, y_train, y_test, epochs=1000):
 
 
 def pt_model_train_and_test(X_train, X_test, y_train, y_test, model, epochs=1000):
-    # Important: Must transform data from numpy to tensor data
     criterion = nn.CrossEntropyLoss()
     optimizer = Adam(params=model.parameters(), lr=0.001)
     # training phase

@@ -2,8 +2,8 @@
 
 # call libraries
 library(caret) # iris classification library
-library(tensorflow) # mnist classification framework. Using Keras instead
-library(keras) # mnist classificationf ramework
+library(tensorflow) # mnist classification framework. Using Κeras instead
+library(keras) # mnist classification framework
 library(torch) # mnist classification framework
 library(dplyr) # R toolkit
 library(magrittr) # R toolkit
